@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+	<style>
+
+		body {
+		  font: 11px sans-serif;
+
+		}
+
+		.axis line,
+		.axis text {
+		  font: 11px sans-serif;
+
+		}
+
+		.axis path {
+		  fill: none;
+		  stroke: #000;
+		  shape-rendering: crispEdges;
+		}
+
+
+	</style>
+	<body>
+		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<script src="d3scatter.js"></script>
+		<script src="http//code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="http//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+		
+		<label for="type">Stock Type:</label>
+
+		 <input type="text" id="mytype" readonly style="border:0; color:#f6931f; font-weight:bold;"><br>
+		  <select id="myselectform">  
+		  	<option value="all">All</option>  
+		  	<option value="tech">Tech.</option>  
+		  	<option value="transp">Transp.</option>  
+		  	<option value="retail">Retail</option>  
+		  	<option value="fastfood">Fastfood</option>  
+		  	<option value="pharm">Pharm.</option>    
+		  </select>
+		  
+		  <script>                    
+		  	document.getElementById("myselectform").onchange = function(){           
+		  		$( "#mytype" ).val(this.value);                         
+		  		filterType(this.value);                  
+		  	}  
+		  </script>
+
+
+
+
+		<p>Volume</p>   //add to html             
+			<div id="vol" class="slider-range"></div>             
+			<label for="volamount">Volume range:</label>             
+			<input type="text" id="volamount" readonly style="border:0; color:#f6931f;
+		font-weight:bold;">
+	</body>
+</html>
+

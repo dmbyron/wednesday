@@ -1,6 +1,19 @@
+/*var data2 = d3.csv("stocks.csv", function(d) {
+  return {
+    name: d.name,
+    type: d.type,
+    price: +d.price,
+    tValue: +d.tValue,
+    vol: +d.vol
+  };
+}, function(error, rows) {
+  console.log(rows);
+});
+*/
+
 var margin = {top: 20, right: 20, bottom: 30, left: 50};
     var w = window.innerWidth - margin.left - margin.right;
-    var h = window.innerHeight- margin.top - margin.bottom;
+    var h = window.innerHeight - margin.top - (margin.bottom + 150);
     //var w = 960 - margin.left - margin.right;
     //var h = 570- margin.top - margin.bottom;
 var data = [
@@ -19,7 +32,7 @@ var data = [
   {name: "M", type: "retail", price: 788, tValue: 631, vol: 310}
 ];
 
-var dataset = data;
+////var dataset = data;
 
 //var col = d3.scale.category10();
 var col = d3.scale.linear()     
@@ -80,37 +93,41 @@ var circles = svg.selectAll("circle")
     //.on("mouseover", function(d,i){ d3.select(this).attr(“r”, 8); })
     //.on("mouseout", function(d,i){ d3.select(this).attr(“r”, 4); })
 
-$(function() { 
-  $( "#vol" ).slider({
-    range: true,
-    min:  0, 
-    max: maxVol, 
-    values: [ 0, maxVol ],       
-    slide: function( event, ui ) {
-      $( "#volamount" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
-      filterData("vol", ui.values); }  });                                                   
-  $( "#volamount" ).val( $( "#vol" ).slider( "values", 0 ) +    
-    " - " + $( "#vol" ).slider( "values", 1 ) );   });
 
-var attributes = ["vol", "price", ...];
-var ranges = [[0,maxVol], [0, maxPrice]];
+var mytype = "all";
+var patt = new RegExp("all");
 
-function filterData(attr, values) {
-  for(i=0; i < attributes.length; i++) {
-    if (attr == attributes[i]) {
-      ranges[i] = values;
-    }
+function filterType(mtype)
+  mytype = mtype;
+  var res = patt.test(mytype)
+  if(res){
+    var toViz = dataset;
+  }else{
+    var toViz = dataset.filter(function(d, i) {
+      return d["type"] == mytype;
+    });
   }
-  var toViz = dataset.filter(function(d)) {
-    for (i = 0; i < attributes.length; i++) {
-      return d[attributes[i]] >= ranges[i][0] && d[attributes[i]] <= ranges[i][1];
-    }
-  });
-  drawVis(toViz);
+  drawViz(toViz);
 }
 
+function drawViz(data) {
+  var circle = svg.selectAll("circle")
+    .data(data);
 
+  circle
+     .attr("cx", function(d) { return x(d.price);  })
+      .attr("cy", function(d) { return y(d.tValue);  })
+      .style("fill", function(d) { return col(d.type); });
 
+      circle.exit().remove(); 
+
+      circle.enter().append("circle") 
+       .attr("cx", function(d) { return x(d.price);  })
+        .attr("cy", function(d) { return y(d.tValue);  })
+        .style("fill", function(d) { return col(d.type); })
+         .attr("r", 4)  
+         .style("stroke", "black"); 
+}
 
 
 
